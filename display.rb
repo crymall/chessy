@@ -18,12 +18,12 @@ class Display
     white_bg = false
     board.board.each_with_index do |row, y|
       white_bg = !white_bg
-      print "#{y} "
+
       row.each_with_index do |space, x|
         white_bg = !white_bg
-        bg = white_bg ? :white : :brown
+        bg = white_bg ? :red : :blue
         bg = :yellow if cursor.cursor_pos == [y,x]
-        piece_color = space.color == :black ? :black : :red
+        piece_color = space.color == :black ? :black : :white
         piece_color = :green if cursor.selected == true && cursor.cursor_pos == [y,x]
 
         print space.symbol.colorize(:color => piece_color, :background => bg)
@@ -32,21 +32,21 @@ class Display
       puts " "
     end
 
-    print "   0  1  2  3  4  5  6  7 "
+    print "#{self.board.turn} to play."
   end
 
-  def test_play
-    # debugger
-    count = 0
-    while count < 1000
+  def play
+    while !self.board.checkmate?(self.board.turn)
       render
-        puts " "
+      puts " "
       cursor.get_input
-      count += 1
     end
+    
+    system("clear")
+    puts "#{self.board.turn} wins!"
   end
 
 end
 
 b = Display.new(Board.new)
-b.test_play
+b.play

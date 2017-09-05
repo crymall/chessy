@@ -46,7 +46,6 @@ class Cursor
 
   def get_input
     key = KEYMAP[read_char]
-    # debugger
     handle_key(key)
   end
 
@@ -91,7 +90,6 @@ class Cursor
       update_pos(MOVES[:left])
       return nil
     when :right
-      # debugger
       update_pos(MOVES[:right])
       return nil
     when :up
@@ -103,7 +101,6 @@ class Cursor
     when :ctrl_c
       Process.exit(0)
     when :space || :return
-      # debugger
       @selected = !@selected
       if selected
         @start_pos = cursor_pos
@@ -119,6 +116,5 @@ class Cursor
     if board.on_board?(new_pos)
       @cursor_pos = new_pos
     end
-    # debugger
   end
 end

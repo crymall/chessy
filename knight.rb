@@ -5,8 +5,8 @@ require_relative "movement"
 class Knight < Piece
   include SteppingPiece
 
-  def initialize(position, color)
-    super(position, color, " ♞ ")
+  def initialize(position, color, board)
+    super(position, color, " ♞ ", board)
   end
 
 end
