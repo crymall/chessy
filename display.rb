@@ -1,7 +1,6 @@
 require_relative "cursor"
 require_relative "board"
 require 'colorize'
-require "byebug"
 
 
 class Display
@@ -41,7 +40,7 @@ class Display
       puts " "
       cursor.get_input
     end
-    
+
     system("clear")
     puts "#{self.board.turn} wins!"
   end

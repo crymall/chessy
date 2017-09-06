@@ -8,8 +8,6 @@ require_relative "queen"
 require_relative "king"
 require_relative "pawn"
 
-require 'byebug'
-
 
 class Board
 

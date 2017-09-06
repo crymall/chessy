@@ -1,5 +1,3 @@
-require 'byebug'
-
 module SlidingPiece
 
   def moves(start_pos)

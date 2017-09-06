@@ -1,6 +1,5 @@
 require_relative "board"
 require_relative "movement"
-require "byebug"
 
 class Piece
   include SlidingPiece
