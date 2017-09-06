@@ -101,6 +101,10 @@ class Board
   def checkmate?(color)
     king_pos = nil
 
+    if in_check?(color) == false
+      return false
+    end
+
     self.board.each_with_index do |el, row|
       el.each_with_index do |space, col|
         if space.is_a?(King) && space.color == color
@@ -112,14 +116,15 @@ class Board
     x = king_pos[0]
     y = king_pos[1]
 
-    if in_check?(color)
-      debugger
-      if self.board[x][y].valid_moves([x, y]).length == 0
-        return true
+    self.board.each_with_index do |el, row|
+      el.each_with_index do |space, col|
+        if space.color == color && space.valid_moves([row, col]).length > 0
+          return false
+        end
       end
     end
 
-    false
+    true
   end
 
 
@@ -165,8 +170,12 @@ class Board
       puts "Can't move to the same space."
       sleep(0.75)
       return false
+    elsif !self[start_pos].moves(start_pos).include?(end_pos)
+      puts "Can't move like that."
+      sleep(0.75)
+      return false
     elsif !self[start_pos].valid_moves(start_pos).include?(end_pos)
-      puts "Invalid move."
+      puts "Can't move into check."
       sleep(0.75)
       return false
     end
