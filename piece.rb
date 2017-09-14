@@ -27,14 +27,16 @@ class Piece
   end
 
   def valid_moves(start_pos)
-    self.moves(start_pos).reject { |pos| move_into_check(pos) }
+    if !self.empty?
+      self.moves(start_pos).reject { |pos| move_into_check(start_pos, pos) }
+    end
   end
 
   private
 
-  def move_into_check(to_pos)
-    dupped = self.board.dup
-    dupped.move_piece!(self.pos, to_pos)
+  def move_into_check(start_pos, to_pos)
+    dupped = Board.duplicate(self.board)
+    dupped.move_piece!(start_pos, to_pos)
     if dupped.in_check?(dupped.turn)
       return true
     end

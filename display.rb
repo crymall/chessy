@@ -1,6 +1,6 @@
 require_relative "cursor"
 require_relative "board"
-require 'colorize'
+require "colorize"
 
 
 class Display
@@ -15,6 +15,7 @@ class Display
   def render
     system("clear")
     white_bg = false
+
     board.board.each_with_index do |row, y|
       white_bg = !white_bg
 
@@ -31,18 +32,24 @@ class Display
       puts " "
     end
 
-    print "#{self.board.turn} to play."
+    print "#{self.board.turn.capitalize} to play."
   end
 
   def play
-    while !self.board.checkmate?(self.board.turn)
+
+    until self.board.checkmate?(self.board.turn)
       render
       puts " "
       cursor.get_input
     end
 
-    system("clear")
-    puts "#{self.board.turn} wins!"
+    if self.board.turn == :white
+      puts "Checkmate!"
+      puts "Black wins!"
+    else
+      puts "Checkmate!"
+      puts "White wins!"
+    end
   end
 
 end

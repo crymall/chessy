@@ -50,33 +50,38 @@ class Board
     arr
   end
 
-  def on_board?(pos)
-    pos.all? { |n| n.between?(0, 7) }
+  def move_piece(start_pos, end_pos)
+    self[start_pos].display_board(self)
+
+    if !self[start_pos].is_a?(NullPiece) &&
+       self[start_pos].valid_moves(start_pos).include?(end_pos)
+      self[end_pos] = self[start_pos]
+      self[start_pos] = NullPiece.instance
+      self[end_pos].pos = end_pos
+      self[end_pos].moved = true
+      self.switch_turn
+    else
+      puts "Invalid move."
+      sleep(0.5)
+    end
   end
 
-  def dup
-    copy = Board.new
+  def move_piece!(start_pos, end_pos)
+    self[start_pos].display_board(self)
 
-    self.board.each_with_index do |el, row|
-      el.each_with_index do |space, col|
-        copy.board[row][col] = space
-        copy.board[row][col].board = copy
-        copy.board[row][col].pos = [row, col]
-      end
-    end
-
-    copy.turn = self.turn
-
-    copy
+    self[end_pos] = self[start_pos]
+    self[start_pos] = NullPiece.instance
+    self[end_pos].pos = end_pos
+    self[end_pos].moved = true
   end
 
   def in_check?(color)
-    king_pos = nil
+    king_pos = []
 
     self.board.each_with_index do |el, row|
       el.each_with_index do |space, col|
         if space.is_a?(King) && space.color == color
-          king_pos = [row, col]
+          king_pos += [row, col]
         end
       end
     end
@@ -86,65 +91,36 @@ class Board
         if !space.is_a?(NullPiece) &&
            space.color != color &&
            space.moves([row, col]).include?(king_pos)
-              if valid_move?([row, col], king_pos)
-                return true
-              end
+              return true
         end
       end
     end
 
     false
+
   end
 
   def checkmate?(color)
-    king_pos = nil
 
-    if in_check?(color) == false
-      return false
-    end
-
-    self.board.each_with_index do |el, row|
-      el.each_with_index do |space, col|
-        if space.is_a?(King) && space.color == color
-          king_pos = [row, col]
+    if in_check?(color)
+      self.board.each_with_index do |el, row|
+        el.each_with_index do |space, col|
+          if !space.is_a?(NullPiece) &&
+             space.color == color &&
+             !space.valid_moves([row, col]).empty?
+                return false
+          end
         end
       end
+
+      return true
     end
 
-    x = king_pos[0]
-    y = king_pos[1]
-
-    self.board.each_with_index do |el, row|
-      el.each_with_index do |space, col|
-        if space.color == color && space.valid_moves([row, col]).length > 0
-          return false
-        end
-      end
-    end
-
-    true
+    false
   end
 
-
-  def move_piece(start_pos, end_pos)
-    self[start_pos].display_board(self)
-
-    if valid_move?(start_pos, end_pos)
-      self[end_pos] = self[start_pos]
-      self[start_pos] = NullPiece.instance
-      self[end_pos].pos = end_pos
-      self[end_pos].moved = true
-      self.switch_turn
-    end
-  end
-
-  def move_piece!(start_pos, end_pos)
-    self[start_pos].display_board(self)
-    self[end_pos] = self[start_pos]
-    self[start_pos] = NullPiece.instance
-    self[end_pos].pos = end_pos
-    self[end_pos].moved = true
-    self.switch_turn
+  def on_board?(pos)
+    pos.all? { |n| n.between?(0, 7) }
   end
 
   def switch_turn
@@ -153,32 +129,6 @@ class Board
     else
       @turn = :white
     end
-  end
-
-  def valid_move?(start_pos, end_pos)
-    if self[start_pos].is_a?(NullPiece)
-      puts "No piece found."
-      sleep(0.75)
-      return false
-    elsif self[start_pos].color != self.turn
-      puts "Not your piece."
-      sleep(0.75)
-      return false
-    elsif start_pos == end_pos
-      puts "Can't move to the same space."
-      sleep(0.75)
-      return false
-    elsif !self[start_pos].moves(start_pos).include?(end_pos)
-      puts "Can't move like that."
-      sleep(0.75)
-      return false
-    elsif !self[start_pos].valid_moves(start_pos).include?(end_pos)
-      puts "Can't move into check."
-      sleep(0.75)
-      return false
-    end
-
-    true
   end
 
   def [](pos)
@@ -191,12 +141,32 @@ class Board
     @board[row][col] = value
   end
 
-  def other_turn
-    if self.turn == :white
-      return :black
-    else
-      return :white
+  def self.duplicate(board)
+    copy = Board.new
+
+    board.board.each_with_index do |el, row|
+      el.each_with_index do |space, col|
+        if space.is_a?(NullPiece)
+          copy.board[row][col] = NullPiece.instance
+        elsif space.is_a?(Pawn)
+          copy.board[row][col] = Pawn.new([row, col], space.color, copy)
+        elsif space.is_a?(Rook)
+          copy.board[row][col] = Rook.new([row, col], space.color, copy)
+        elsif space.is_a?(Knight)
+          copy.board[row][col] = Knight.new([row, col], space.color, copy)
+        elsif space.is_a?(Bishop)
+          copy.board[row][col] = Bishop.new([row, col], space.color, copy)
+        elsif space.is_a?(Queen)
+          copy.board[row][col] = Queen.new([row, col], space.color, copy)
+        elsif space.is_a?(King)
+          copy.board[row][col] = King.new([row, col], space.color, copy)
+        end
+      end
     end
+
+    copy.turn = board.turn
+
+    copy
   end
 
 end
