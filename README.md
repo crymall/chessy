@@ -1,5 +1,7 @@
 # Chessy
 
+![screen1](images/chess.png)
+
 ## Description
 
 A terminal-based chess game for two players implemented in Ruby.
@@ -12,6 +14,8 @@ Use the arrow keys to move the cursor, spacebar to select a piece, and spacebar
 to move your piece to a valid space. On checkmate, the game will automatically end.
 
 ## Implementation
+
+![screen2](images/chess2.png)
 
 Chessy was implemented from scratch in Ruby. Several steps were taken to ensure DRY code:
 
