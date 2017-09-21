@@ -6,7 +6,9 @@
 
 A terminal-based chess game for two players implemented in Ruby.
 
-To play, simply clone the repo, ensure you have Ruby installed, and in the terminal, type:
+To play, [clone the repo](https://help.github.com/articles/cloning-a-repository/) or, in the upper-right under "clone or download," download Chessy and unzip it into the directory of your choice.
+
+Ensure you have [Ruby](https://www.ruby-lang.org/en/) installed, and in the terminal, [navigate to the correct directory](https://askubuntu.com/questions/520778/how-can-i-change-directories-in-the-terminal). Then type:
 
 `ruby display.rb`
 
