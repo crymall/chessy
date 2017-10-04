@@ -8,7 +8,12 @@ A terminal-based chess game for two players implemented in Ruby.
 
 To play, [clone the repo](https://help.github.com/articles/cloning-a-repository/) or, in the upper-right under "clone or download," download Chessy and unzip it into the directory of your choice.
 
-Ensure you have [Ruby](https://www.ruby-lang.org/en/) installed, and in the terminal, [navigate to the correct directory](https://askubuntu.com/questions/520778/how-can-i-change-directories-in-the-terminal). Then type:
+Ensure you have [Ruby](https://www.ruby-lang.org/en/) installed, and in the terminal, [navigate to the correct directory](https://askubuntu.com/questions/520778/how-can-i-change-directories-in-the-terminal). First, type:
+
+`gem install colorize`
+
+This ensures your terminal has a full suite of colors for your pieces and board.
+Then, type:
 
 `ruby display.rb`
 
